@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>🌸 My Daily Journal 💗</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <style>
+    body {
+      font-family: 'Quicksand', sans-serif;
+      transition: background-color 0.4s ease, color 0.4s ease, opacity 0.4s ease;
+    }
+    .format-btn.active {
+      background-color: #ec4899; /* pink-500 */
+      color: white;
+      animation: pulse 0.3s ease-in-out;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    /* New styles for features */
+    .feature-card {
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 1rem;
+      border-radius: 0.75rem;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+      transition: box-shadow 0.3s ease;
+    }
+    
+    .feature-card:hover {
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    .badge {
+      padding: 0.25rem 0.5rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    
+    .badge-primary {
+      background-color: #fce7f3;
+      color: #be185d;
+    }
+    
+    .badge-success {
+      background-color: #dcfce7;
+      color: #166534;
+    }
+    
+    .badge-warning {
+      background-color: #fef3c7;
+      color: #92400e;
+    }
+    
+    .badge-info {
+      background-color: #dbeafe;
+      color: #1e40af;
+    }
+    
+    .timeline-item {
+      position: relative;
+      padding-left: 2rem;
+      padding-bottom: 2rem;
+      border-left: 2px solid #fce7f3;
+    }
+    
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -9px;
+      top: 0;
+      width: 1rem;
+      height: 1rem;
+      border-radius: 9999px;
+      background-color: #f472b6;
+    }
+    
+    .calendar-day {
+      width: 2rem;
+      height: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 9999px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+    
+    .calendar-day:hover {
+      background-color: #fce7f3;
+    }
+    
+    .calendar-day.has-entry {
+      background-color: #fce7f3;
+    }
+    
+    .calendar-day.today {
+      border: 2px solid #ec4899;
+    }
+    
+    .prompt-card {
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 1rem;
+      border-radius: 0.75rem;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+      transition: box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .prompt-card:hover {
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    .template-card {
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 1rem;
+      border-radius: 0.75rem;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    }
+    .stats-card {
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 1rem;
+      border-radius: 0.75rem;
+      box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1);
+    }
+    
+    .goal-progress {
+      height: 8px;
+      background-color: #f3f4f6;
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+    
+    .goal-progress-bar {
+      height: 100%;
+      background-color: #ec4899;
+      transition: width 0.3s ease;
+    }
+
+    .calendar-day {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .calendar-day:hover {
+      background-color: #fce7f3;
+    }
+
+    .calendar-day.has-entries {
+      background-color: #fce7f3;
+      color: #ec4899;
+    }
+
+    .calendar-day.has-entries:hover {
+      background-color: #fbcfe8;
+    }
+
+    .timeline-item {
+      position: relative;
+      padding-left: 2rem;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background-color: #fce7f3;
+    }
+
+    .timeline-item::after {
+      content: '';
+      position: absolute;
+      left: -4px;
+      top: 0;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: #ec4899;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col items-center py-6 px-4 bg-pink-100 text-pink-900">
+
+  <div class="w-full max-w-6xl space-y-6">
+
+    <header class="flex flex-col md:flex-row items-center mb-4 gap-2 md:gap-0">
+      <h1 class="text-4xl font-bold text-pink-600 drop-shadow text-center w-full md:w-auto">🌸 My Daily Journal 💗</h1>
+      <div class="flex items-center gap-2 w-full md:w-auto justify-center md:justify-end">
+      <select id="themeSelect" class="bg-pink-200 text-pink-800 rounded-full px-3 py-1 text-sm focus:outline-none w-full md:w-auto max-w-xs">
+        <option value="cozy">Cozy</option>
+        <option value="dark">Dark</option>
+        <option value="vintage">Vintage</option>
+      </select>
+        <button id="logoutBtn" class="bg-red-400 text-white px-3 py-1 rounded-full hover:bg-red-500 transition text-sm whitespace-nowrap">
+          👋 Logout
+        </button>
+      </div>
+    </header>
+
+    <!-- Search and Filters -->
+    <div class="flex flex-wrap gap-2">
+      <input
+        id="searchInput"
+        type="text"
+        placeholder="Search entries..."
+        class="flex-1 min-w-[200px] p-2 rounded-xl border border-pink-300 bg-pink-50 focus:outline-pink-400"
+      />
+      <select
+        id="filterCategory"
+        class="p-2 rounded-xl border border-pink-300 bg-pink-50 focus:outline-pink-400"
+      >
+        <option value="">All Categories</option>
+        <option value="personal">Personal</option>
+        <option value="work">Work</option>
+        <option value="health">Health</option>
+        <option value="travel">Travel</option>
+        <option value="ideas">Ideas</option>
+        <option value="goals">Goals</option>
+        <option value="other">Other</option>
+      </select>
+      <input
+        id="dateFilter"
+        type="date"
+        class="p-2 rounded-xl border border-pink-300 bg-pink-50 focus:outline-pink-400"
+      />
+    </div>
+
+    <!-- Quick Actions Bar -->
+    <div class="flex flex-wrap gap-2">
+      <button id="newEntryBtn" class="bg-pink-400 text-white px-4 py-2 rounded-full hover:bg-pink-500 transition">
+        <i class="fas fa-plus mr-2"></i>New Entry
+      </button>
+      <button id="templatesBtn" class="bg-purple-400 text-white px-4 py-2 rounded-full hover:bg-purple-500 transition">
+        <i class="fas fa-file-alt mr-2"></i>Templates
+      </button>
+      <button id="promptsBtn" class="bg-blue-400 text-white px-4 py-2 rounded-full hover:bg-blue-500 transition">
+        <i class="fas fa-lightbulb mr-2"></i>Prompts
+      </button>
+      <button id="statsBtn" class="bg-green-400 text-white px-4 py-2 rounded-full hover:bg-green-500 transition">
+        <i class="fas fa-chart-bar mr-2"></i>Statistics
+      </button>
+      <button id="goalsBtn" class="bg-yellow-400 text-white px-4 py-2 rounded-full hover:bg-yellow-500 transition">
+        <i class="fas fa-bullseye mr-2"></i>Goals
+      </button>
+      <button id="viewEntriesBtn" class="bg-indigo-400 text-white px-4 py-2 rounded-full hover:bg-indigo-500 transition">
+        <i class="fas fa-history mr-2"></i>View Entries
+      </button>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <!-- Left Column - Entry Form -->
+      <div class="md:col-span-2 space-y-6">
+      <!-- Title + Mood Card -->
+      <section class="bg-white/90 p-6 rounded-2xl shadow space-y-4">
+        <input
+          id="entryTitle"
+          type="text"
+          placeholder="Today's Title"
+          class="w-full p-3 rounded-xl border border-pink-300 bg-pink-50 focus:outline-pink-400"
+        />
+          <div class="flex gap-2">
+        <select
+          id="moodSelect"
+              class="w-1/2 rounded-xl p-3 bg-pink-100 border border-pink-300 text-pink-700 focus:outline-pink-400"
+        >
+          <option value="😊">😊 Happy</option>
+          <option value="😢">😢 Sad</option>
+          <option value="😡">😡 Angry</option>
+          <option value="🥰">🥰 In Love</option>
+          <option value="😴">😴 Tired</option>
+              <option value="🤔">🤔 Thoughtful</option>
+              <option value="🎉">🎉 Excited</option>
+              <option value="😌">😌 Peaceful</option>
+            </select>
+            <select
+              id="categorySelect"
+              class="w-1/2 rounded-xl p-3 bg-pink-100 border border-pink-300 text-pink-700 focus:outline-pink-400"
+            >
+              <option value="personal">Personal</option>
+              <option value="work">Work</option>
+              <option value="health">Health</option>
+              <option value="travel">Travel</option>
+              <option value="ideas">Ideas</option>
+              <option value="goals">Goals</option>
+              <option value="other">Other</option>
+        </select>
+          </div>
+          <div class="flex gap-2">
+            <button id="templateBtn" class="bg-purple-400 text-white px-4 py-2 rounded-full hover:bg-purple-500 transition text-sm">
+              <i class="fas fa-file-alt mr-2"></i>Templates
+            </button>
+            <button id="promptBtn" class="bg-blue-400 text-white px-4 py-2 rounded-full hover:bg-blue-500 transition text-sm">
+              <i class="fas fa-lightbulb mr-2"></i>Prompts
+            </button>
+          </div>
+      </section>
+
+      <!-- Journal Entry Card -->
+      <section class="bg-white/90 p-6 rounded-2xl shadow space-y-4">
+          <div class="flex flex-wrap gap-2 mb-2">
+            <!-- Text Formatting -->
+            <button class="format-btn bg-pink-100 text-pink-700 px-3 py-1 rounded hover:bg-pink-200 transition" data-format="bold" title="Bold">
+                <i class="fas fa-bold"></i>
+            </button>
+            <button class="format-btn bg-pink-100 text-pink-700 px-3 py-1 rounded hover:bg-pink-200 transition" data-format="italic" title="Italic">
+                <i class="fas fa-italic"></i>
+            </button>
+            <button class="format-btn bg-pink-100 text-pink-700 px-3 py-1 rounded hover:bg-pink-200 transition" data-format="underline" title="Underline">
+                <i class="fas fa-underline"></i>
+            </button>
+            <button class="format-btn bg-pink-100 text-pink-700 px-3 py-1 rounded hover:bg-pink-200 transition" data-format="strikeThrough" title="Strikethrough">
+                <i class="fas fa-strikethrough"></i>
+            </button>
+            
+            <!-- Lists -->
+            <button class="format-btn bg-pink-100 text-pink-700 px-3 py-1 rounded hover:bg-pink-200 transition" data-format="insertUnorderedList" title="Bullet List">
+                <i class="fas fa-list-ul"></i>
+            </button>
+            <button class="format-btn bg-pink-100 text-pink-700 px-3 py-1 rounded hover:bg-pink-200 transition" data-format="insertOrderedList" title="Numbered List">
+                <i class="fas fa-list-ol"></i>
+            </button>
+            
+            <!-- Alignment -->
+            <button class="format-btn bg-pink-100 text-pink-700 px-3 py-1 rounded hover:bg-pink-200 transition" data-format="justifyLeft" title="Align Left">
+                <i class="fas fa-align-left"></i>
+            </button>
+            <button class="format-btn bg-pink-100 text-pink-700 px-3 py-1 rounded hover:bg-pink-200 transition" data-format="justifyCenter" title="Align Center">
+                <i class="fas fa-align-center"></i>
+            </button>
+            <button class="format-btn bg-pink-100 text-pink-700 px-3 py-1 rounded hover:bg-pink-200 transition" data-format="justifyRight" title="Align Right">
+                <i class="fas fa-align-right"></i>
+            </button>
+            
+            <!-- Font Size -->
+            <select class="format-select bg-white border border-pink-200 text-pink-700 px-2 py-1 rounded hover:bg-pink-50 transition" id="fontSize">
+                <option value="1">Small</option>
+                <option value="2">Normal</option>
+                <option value="3">Large</option>
+                <option value="4">Extra Large</option>
+            </select>
+            
+            <!-- Font Color -->
+            <input type="color" class="w-8 h-8 rounded border border-pink-200 cursor-pointer" id="fontColor" title="Font Color">
+          </div>
+          <div
+          id="journalEntry"
+            contenteditable="true"
+            class="w-full p-4 rounded-xl border border-pink-300 bg-pink-50 min-h-[200px] focus:outline-pink-400"
+          ></div>
+          <div class="flex justify-between items-center">
+            <span id="wordCount" class="text-sm text-pink-600">0 words</span>
+            <div class="flex gap-3">
+          <button id="saveBtn" class="bg-pink-400 text-white px-6 py-2 rounded-full hover:bg-pink-500 transition">
+                <i class="fas fa-save mr-2"></i>Save
+          </button>
+          <button id="clearBtn" class="border border-pink-400 text-pink-600 px-6 py-2 rounded-full hover:bg-pink-200 transition">
+                <i class="fas fa-eraser mr-2"></i>Clear
+          </button>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Right Column - Stats & Calendar -->
+      <div class="space-y-6">
+        <!-- Stats Card -->
+        <section class="bg-white/90 p-6 rounded-2xl shadow space-y-4">
+          <h2 class="text-xl font-bold text-pink-600">📊 Statistics</h2>
+          <div class="grid grid-cols-2 gap-4">
+            <div class="stats-card bg-pink-50 p-4 rounded-xl">
+              <h3 class="text-sm font-semibold text-pink-700">Writing Streak</h3>
+              <p id="streakCount" class="text-2xl font-bold text-pink-600">0 days</p>
+            </div>
+            <div class="stats-card bg-pink-50 p-4 rounded-xl">
+              <h3 class="text-sm font-semibold text-pink-700">Total Entries</h3>
+              <p id="totalEntries" class="text-2xl font-bold text-pink-600">0</p>
+            </div>
+            <div class="stats-card bg-pink-50 p-4 rounded-xl">
+              <h3 class="text-sm font-semibold text-pink-700">Most Used Tag</h3>
+              <p id="mostUsedTag" class="text-2xl font-bold text-pink-600">-</p>
+            </div>
+            <div class="stats-card bg-pink-50 p-4 rounded-xl">
+              <h3 class="text-sm font-semibold text-pink-700">Total Words</h3>
+              <p id="totalWords" class="text-2xl font-bold text-pink-600">0</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Calendar Card -->
+        <section class="bg-white/90 p-6 rounded-2xl shadow space-y-4">
+          <h2 class="text-xl font-bold text-pink-600">📅 Calendar</h2>
+          <div id="calendar" class="grid grid-cols-7 gap-1">
+            <!-- Calendar will be populated by JavaScript -->
+        </div>
+      </section>
+
+        <!-- Goals Card -->
+        <section class="bg-white/90 p-6 rounded-2xl shadow space-y-4">
+          <h2 class="text-xl font-bold text-pink-600">🎯 Goals</h2>
+          <div class="space-y-4">
+            <div>
+              <div class="flex justify-between mb-1">
+                <span class="text-sm font-semibold text-pink-700">Daily Writing</span>
+                <span class="text-sm text-pink-600">0/7 days</span>
+              </div>
+              <div class="goal-progress">
+                <div class="goal-progress-bar" style="width: 0%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between mb-1">
+                <span class="text-sm font-semibold text-pink-700">Word Count</span>
+                <span class="text-sm text-pink-600">0/1000 words</span>
+              </div>
+              <div class="goal-progress">
+                <div class="goal-progress-bar" style="width: 0%"></div>
+              </div>
+            </div>
+          </div>
+      </section>
+      </div>
+    </div>
+
+    <!-- Export Controls -->
+    <div class="mt-4 flex flex-col md:flex-row gap-4 justify-between items-center max-w-6xl w-full">
+      <div class="flex gap-2">
+        <button id="exportPDF" class="bg-green-400 text-white px-4 py-2 rounded-full hover:bg-green-500 transition text-sm">
+          📄 Export PDF
+        </button>
+        <button id="exportMD" class="bg-green-400 text-white px-4 py-2 rounded-full hover:bg-green-500 transition text-sm">
+          📝 Export Markdown
+        </button>
+        <button id="exportTXT" class="bg-green-400 text-white px-4 py-2 rounded-full hover:bg-green-500 transition text-sm">
+          📋 Export Text
+        </button>
+      </div>
+      <button id="backupBtn" class="bg-blue-400 text-white px-4 py-2 rounded-full hover:bg-blue-500 transition text-sm">
+        💾 Backup Data
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal for Entry Details -->
+  <div
+    id="modal"
+    class="fixed inset-0 bg-black/40 flex items-center justify-center hidden z-50"
+  >
+    <div
+      class="bg-white w-full max-w-2xl p-6 rounded-2xl shadow-2xl relative"
+    >
+      <button
+        id="closeModal"
+        class="absolute top-2 right-4 text-3xl text-pink-400 hover:text-pink-600 transition"
+      >
+        &times;
+      </button>
+      <h3 id="modalTitle" class="text-2xl font-bold text-pink-600 mb-2"></h3>
+      <p id="modalMood" class="text-xl mb-1"></p>
+      <p id="modalDate" class="text-xs text-gray-400 mb-4"></p>
+      <div id="modalContent" class="prose max-w-none"></div>
+    </div>
+  </div>
+
+  <!-- Make sure this is the last thing before </body> -->
+  <script src="script.js"></script>
+</body>
+</html>
