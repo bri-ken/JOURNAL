@@ -24,7 +24,6 @@
 ### Prerequisites
 
 - Git installed  
-- Node.js & npm (if you need to run the app locally)  
 - Modern web browser  
 
 ### Installation
@@ -32,5 +31,3 @@
 ```bash
 git clone https://github.com/bri-ken/JOURNAL.git
 cd JOURNAL
-npm install        # if you have dependencies
-npm start          # to run locally
